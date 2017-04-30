@@ -167,6 +167,22 @@ for line in fileinput.input([input_file]):
         eeprom.append(format(replay_count_msb,'#04X'))
         eeprom.append('0x00') # end of command
 
+    elif command in ('AGAIN', 'REPEAT_BLOCK'):
+        if not options.isdigit():
+            info(0, '{} only accepts integers'.format(command), exit=3)
+        #last_command = commands.splitlines()[-1]
+        replay_block_count = int(options)
+        eeprom.append('0xA6')
+        replay_block_count_msb = (replay_block_count>>8) & 0xff
+        replay_block_count_lsb = (replay_block_count & 0xff)
+        eeprom.append(format(replay_block_count_lsb,'#04X'))
+        eeprom.append(format(replay_block_count_msb,'#04X'))
+        eeprom.append('0x00') # end of command
+
+    elif command in ('BEGIN','BLOCK','START_BLOCK',):
+        eeprom.append('0xA5')
+        eeprom.append('0x00') # end of command
+
 
     elif command in ('STRING', 'TEXT', 'PRINT'):
         for c in options:
