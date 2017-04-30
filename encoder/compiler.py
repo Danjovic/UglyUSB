@@ -134,6 +134,7 @@ for line in fileinput.input([input_file]):
     elif command in ('DEFAULT_DELAY', 'DEFAULTDELAY'):
         if not options.isdigit():
             info(0, '{} only accepts integers'.format(command), exit=3)
+        delay = int(options)
         eeprom.append('0xDF')
         delay_msb = (delay>>8) & 0xff
         delay_lsb = (delay & 0xff)
